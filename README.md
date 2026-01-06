@@ -2,6 +2,8 @@
 
 Un sistema robusto y escalable para la gestión de cursos y lecciones, construido con una arquitectura moderna y segura utilizando .NET 8 y Angular 18.
 
+[Ver Diagramas de Arquitectura y Base de Datos](./docs/DIAGRAMS.md)
+
 ## 🚀 Arquitectura del Sistema
 
 El proyecto sigue los principios de **Clean Architecture** y patrones de diseño avanzados:
