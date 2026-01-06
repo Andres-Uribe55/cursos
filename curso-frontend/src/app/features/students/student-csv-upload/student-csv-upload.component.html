@@ -1,0 +1,22 @@
+<div class="upload-container">
+    <h1>Importar Estudiantes (CSV)</h1>
+
+    <div class="instructions">
+        <p>El archivo CSV debe tener el siguiente formato (sin encabezados):</p>
+        <code>nombres,apellidos,documento,edad,email</code>
+    </div>
+
+    <div class="error-message" *ngIf="error">{{ error }}</div>
+    <div class="success-message" *ngIf="success">{{ success }}</div>
+
+    <div class="upload-form">
+        <input type="file" (change)="onFileSelected($event)" accept=".csv">
+
+        <div class="form-actions">
+            <button routerLink="/students" class="btn-secondary">Volver</button>
+            <button (click)="upload()" [disabled]="!selectedFile || loading" class="btn-primary">
+                {{ loading ? 'Procesando...' : 'Subir' }}
+            </button>
+        </div>
+    </div>
+</div>

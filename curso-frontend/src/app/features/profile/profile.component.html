@@ -1,0 +1,114 @@
+<div class="profile-container fade-in">
+    <div class="profile-header">
+        <h1>Mi Perfil</h1>
+        <p>Gestiona tu información personal y seguridad</p>
+    </div>
+
+    <div class="profile-content">
+        <!-- Sidebar Navigation -->
+        <div class="profile-sidebar card-glass">
+            <div class="user-info">
+                <div class="avatar-placeholder">
+                    {{ userInitials }}
+                </div>
+                <h3>{{ profile?.firstName || 'Usuario' }} {{ profile?.lastName }}</h3>
+                <span class="role-badge">{{ profile?.role || 'Estudiante' }}</span>
+            </div>
+
+            <nav class="profile-nav">
+                <button [class.active]="activeTab === 'info'" (click)="activeTab = 'info'">
+                    <i class='bx bx-user'></i> Información Personal
+                </button>
+                <button [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+                    <i class='bx bx-lock-alt'></i> Seguridad
+                </button>
+            </nav>
+        </div>
+
+        <!-- Content Area -->
+        <div class="profile-main card-glass">
+
+            <!-- Personal Info Tab -->
+            <div *ngIf="activeTab === 'info'" class="tab-content slide-up">
+                <h2>Información Personal</h2>
+
+                <form (ngSubmit)="updateInfo()">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" [(ngModel)]="profileData.firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido</label>
+                            <input type="text" [(ngModel)]="profileData.lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Edad</label>
+                            <input type="number" [(ngModel)]="profileData.age" name="age" min="10" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Documento de Identidad</label>
+                            <input type="text" [(ngModel)]="profileData.documentNumber" name="documentNumber">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" [value]="profile?.email" disabled class="input-disabled">
+                        <small>El correo no se puede cambiar</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" [disabled]="loading">
+                            {{ loading ? 'Guardando...' : 'Guardar Cambios' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Security Tab -->
+            <div *ngIf="activeTab === 'security'" class="tab-content slide-up">
+                <h2>Cambiar Contraseña</h2>
+
+                <form (ngSubmit)="changePassword()">
+                    <div class="form-group">
+                        <label>Contraseña Actual</label>
+                        <input type="password" [(ngModel)]="passwordData.currentPassword" name="currentPassword"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nueva Contraseña</label>
+                        <input type="password" [(ngModel)]="passwordData.newPassword" name="newPassword" required
+                            minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirmar Nueva Contraseña</label>
+                        <input type="password" [(ngModel)]="passwordData.confirmNewPassword" name="confirmNewPassword"
+                            required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary" [disabled]="loading">
+                            {{ loading ? 'Actualizando...' : 'Actualizar Contraseña' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert success fade-in">
+                <i class='bx bx-check-circle'></i> {{ successMessage }}
+            </div>
+
+            <div *ngIf="errorMessage" class="alert error fade-in">
+                <i class='bx bx-error-circle'></i> {{ errorMessage }}
+            </div>
+
+        </div>
+    </div>
+</div>

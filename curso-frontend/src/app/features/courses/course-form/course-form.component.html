@@ -1,0 +1,35 @@
+<div class="form-container">
+    <div class="form-card">
+        <h2>{{ isEditMode ? 'Editar Curso' : 'Nuevo Curso' }}</h2>
+
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="title">Título del Curso</label>
+                <input type="text" id="title" [(ngModel)]="title" name="title" required
+                    placeholder="Ingrese el título del curso" [disabled]="loading">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <textarea id="description" [(ngModel)]="description" name="description" rows="4"
+                    placeholder="Descripción del curso" [disabled]="loading"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="resourceUrl">Enlace de Recursos</label>
+                <input type="url" id="resourceUrl" [(ngModel)]="resourceUrl" name="resourceUrl"
+                    placeholder="https://ejemplo.com/recursos" [disabled]="loading">
+                <small class="form-hint">Opcional: Enlace a material adicional, repositorio, etc.</small>
+            </div>
+
+            <div class="error-message" *ngIf="error">{{ error }}</div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary" [disabled]="loading">
+                    {{ loading ? 'Guardando...' : 'Guardar' }}
+                </button>
+                <a routerLink="/courses" class="btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

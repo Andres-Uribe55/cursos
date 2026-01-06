@@ -1,0 +1,82 @@
+<div class="detail-container fade-in" *ngIf="courseSummary && !loading">
+    <!-- Hero Header -->
+    <div class="hero-header">
+        <div class="hero-content">
+            <div class="hero-top">
+                <a routerLink="/courses" class="btn-back">
+                    <i class='bx bx-arrow-back'></i> Volver
+                </a>
+                <div class="hero-actions" *ngIf="authService.isAdmin()">
+                    <button *ngIf="courseSummary.status === CourseStatus.Draft" (click)="publish()"
+                        [disabled]="lessons.length === 0"
+                        [title]="lessons.length === 0 ? 'Agrega al menos una lección para publicar' : 'Publicar curso'"
+                        class="btn-glass success">
+                        <i class='bx bx-upload'></i> Publicar
+                    </button>
+                    <button *ngIf="courseSummary.status === CourseStatus.Published" (click)="unpublish()"
+                        class="btn-glass warning">
+                        <i class='bx bx-hide'></i> Despublicar
+                    </button>
+                    <a [routerLink]="['/courses', courseId, 'edit']" class="btn-glass secondary">
+                        <i class='bx bx-edit'></i> Editar
+                    </a>
+                </div>
+            </div>
+
+            <h1 class="hero-title">{{ courseSummary.title }}</h1>
+
+            <div class="hero-meta">
+                <span class="status-pill" [class.published]="courseSummary.status === 'Published'">
+                    <i class='bx' [class.bx-check-circle]="courseSummary.status === 'Published'"
+                        [class.bx-edit-alt]="courseSummary.status !== 'Published'"></i>
+                    {{ courseSummary.status === 'Published' ? 'Publicado' : 'Borrador' }}
+                </span>
+                <span class="meta-item">
+                    <i class='bx bx-calendar'></i> Act. {{ courseSummary.lastModified | date:'mediumDate' }}
+                </span>
+                <span class="meta-item">
+                    <i class='bx bx-book-content'></i> {{ courseSummary.totalLessons }} Lecciones
+                </span>
+            </div>
+        </div>
+        <div class="hero-pattern"></div>
+    </div>
+
+    <div class="content-wrapper slide-up">
+        <!-- Lessons Section -->
+        <div class="section-card card-glass">
+            <div class="section-header">
+                <h2><i class='bx bx-list-ul'></i> Contenido del Curso</h2>
+            </div>
+
+            <div class="lessons-container">
+                <app-lesson-list [courseId]="courseId" [lessons]="lessons"
+                    (lessonsUpdated)="onLessonsUpdated()"></app-lesson-list>
+            </div>
+
+            <!-- Publish CTA when course has lessons and is in draft -->
+            <div class="publish-cta"
+                *ngIf="authService.isAdmin() && courseSummary.status === CourseStatus.Draft && lessons.length > 0">
+                <div class="cta-content">
+                    <i class='bx bx-rocket'></i>
+                    <div class="cta-text">
+                        <h3>¡Listo para publicar!</h3>
+                        <p>Este curso tiene {{ lessons.length }} lección(es) y está listo para ser publicado.</p>
+                    </div>
+                    <button (click)="publish()" class="btn-primary">
+                        <i class='bx bx-upload'></i> Publicar Curso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-container" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Cargando detalles del curso...</p>
+</div>
+
+<div class="error-alert fade-in" *ngIf="error">
+    <i class='bx bx-error-circle'></i> {{ error }}
+</div>

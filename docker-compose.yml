@@ -1,0 +1,40 @@
+services:
+  database:
+    image: postgres:15-alpine
+    container_name: course-platform-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: courseplatform
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./curso-backend
+      dockerfile: Dockerfile
+    container_name: course-platform-api
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=database;Database=courseplatform;Username=root;Password=your_password
+      - Jwt__Key=.0FIzYIJ$£.#hBd6m30&W~kbtxj%d814Qwlañ**
+      - Jwt__Issuer=CoursePlatform
+      - Jwt__Audience=CoursePlatformUsers
+    ports:
+      - "5207:8080"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./curso-frontend
+      dockerfile: Dockerfile
+    container_name: course-platform-ui
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

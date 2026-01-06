@@ -1,0 +1,33 @@
+# .gitignore Maestro para Curso-Plataforma
+
+# Dotnet
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.userosscache
+*.sln.doccache
+.vs/
+.vscode/
+appsettings.Development.json
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/
+
+# Docker
+.dockerignore
+# (Opcional: puedes querer subir el docker-compose.yml pero no los datos)
+/postgres_data/
+
+# OS
+.DS_Store
+thumbs.db
+desktop.ini

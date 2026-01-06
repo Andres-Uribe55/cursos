@@ -1,0 +1,96 @@
+<div class="list-container fade-in">
+    <div class="header-section">
+        <div class="title-wrapper">
+            <h1>Gestión de Estudiantes</h1>
+            <p class="subtitle">Administra los usuarios registrados en la plataforma</p>
+        </div>
+        <div class="actions-wrapper">
+            <a routerLink="/students/import" class="btn-secondary">
+                <i class='bx bx-import'></i> Importar CSV
+            </a>
+            <a routerLink="/students/new" class="btn-primary">
+                <i class='bx bx-user-plus'></i> Nuevo Estudiante
+            </a>
+        </div>
+    </div>
+
+    <div class="filters-card card-glass mb-2">
+        <div class="search-wrapper">
+            <i class='bx bx-search search-icon'></i>
+            <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()"
+                placeholder="Buscar por nombre, email o documento..." class="search-input">
+        </div>
+        <button (click)="onSearch()" class="btn-secondary">
+            <i class='bx bx-search-alt'></i> Buscar
+        </button>
+    </div>
+
+    <div class="table-card card-glass slide-up" *ngIf="!loading; else loadingTpl">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Email</th>
+                        <th>Documento</th>
+                        <th>Edad</th>
+                        <th>Registro</th>
+                        <th class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let student of students" class="table-row">
+                        <td>
+                            <div class="user-cell">
+                                <div class="avatar-placeholder">{{ student.firstName[0] }}{{ student.lastName[0] }}
+                                </div>
+                                <div>
+                                    <div class="font-medium">{{ student.firstName }} {{ student.lastName }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-muted">{{ student.email }}</td>
+                        <td>
+                            <span class="badge-outline">{{ student.documentNumber || 'N/A' }}</span>
+                        </td>
+                        <td>{{ student.age || '-' }}</td>
+                        <td class="text-muted text-sm">
+                            {{ student.createdAt | date:'dd MMM yyyy' }}
+                        </td>
+                        <td class="text-right">
+                            <button (click)="deleteStudent(student.id)" class="btn-icon danger"
+                                title="Eliminar estudiante">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="students.length === 0">
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class='bx bx-user-x'></i>
+                                <p>No se encontraron estudiantes</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-footer" *ngIf="totalItems > pageSize">
+            <button [disabled]="page === 1" (click)="changePage(page - 1)" class="btn-secondary btn-sm">
+                <i class='bx bx-chevron-left'></i> Anterior
+            </button>
+            <span class="page-info">Página {{ page }}</span>
+            <button [disabled]="students.length < pageSize" (click)="changePage(page + 1)" class="btn-secondary btn-sm">
+                Siguiente <i class='bx bx-chevron-right'></i>
+            </button>
+        </div>
+    </div>
+
+    <ng-template #loadingTpl>
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Cargando lista de estudiantes...</p>
+        </div>
+    </ng-template>
+</div>

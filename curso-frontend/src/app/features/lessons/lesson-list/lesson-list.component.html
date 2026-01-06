@@ -1,0 +1,32 @@
+<div class="lesson-list">
+    <div class="list-header" *ngIf="authService.isAdmin()">
+        <button (click)="openCreateForm()" class="btn-primary">+ Nueva Lección</button>
+    </div>
+
+    <div class="no-lessons" *ngIf="lessons.length === 0">
+        No hay lecciones creadas
+    </div>
+
+    <div class="lessons" *ngIf="lessons.length > 0">
+        <div class="lesson-item" *ngFor="let lesson of lessons">
+            <div class="lesson-info">
+                <span class="lesson-order">{{ lesson.order }}</span>
+                <h4>{{ lesson.title }}</h4>
+            </div>
+
+            <div class="lesson-actions" *ngIf="authService.isAdmin()">
+                <button (click)="moveUp(lesson.id)" class="btn-icon" [disabled]="!canMoveUp(lesson)" title="Subir">
+                    ↑
+                </button>
+                <button (click)="moveDown(lesson.id)" class="btn-icon" [disabled]="!canMoveDown(lesson)" title="Bajar">
+                    ↓
+                </button>
+                <button (click)="openEditForm(lesson)" class="btn-edit">Editar</button>
+                <button (click)="deleteLesson(lesson.id)" class="btn-delete">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <app-lesson-form *ngIf="showForm" [courseId]="courseId" [lesson]="editingLesson" (saved)="onLessonSaved()"
+        (cancelled)="closeForm()"></app-lesson-form>
+</div>

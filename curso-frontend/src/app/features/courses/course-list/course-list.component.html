@@ -1,0 +1,104 @@
+<div class="course-list-container fade-in">
+    <div class="header-section">
+        <div class="title-wrapper">
+            <h1>Explora Cursos</h1>
+            <p class="subtitle">Gestiona y descubre contenido educativo</p>
+        </div>
+        <a *ngIf="authService.isAdmin()" routerLink="/courses/new" class="btn-primary">
+            <i class='bx bx-plus'></i> Nuevo Curso
+        </a>
+    </div>
+
+    <div class="filters-card card-glass mb-2">
+        <div class="search-wrapper">
+            <i class='bx bx-search search-icon'></i>
+            <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Buscar por título..."
+                class="search-input">
+        </div>
+
+        <select *ngIf="authService.isAdmin()" [(ngModel)]="selectedStatus" (change)="onStatusChange()"
+            class="status-select">
+            <option value="">Todos los Estados</option>
+            <option [value]="CourseStatus.Draft">Borradores</option>
+            <option [value]="CourseStatus.Published">Publicados</option>
+        </select>
+
+        <button (click)="onSearch()" class="btn-secondary">
+            <i class='bx bx-filter-alt'></i> Filtrar
+        </button>
+    </div>
+
+    <div class="error-alert slide-up" *ngIf="error">
+        <i class='bx bx-error-circle'></i> {{ error }}
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+        <div class="loading-spinner"></div>
+        <p>Cargando cursos...</p>
+    </div>
+
+    <div class="courses-grid slide-up" *ngIf="!loading && courses.length > 0">
+        <div class="course-card card-hover" *ngFor="let course of courses">
+            <div class="course-image-placeholder">
+                <i class='bx bx-book-bookmark'></i>
+            </div>
+
+            <div class="course-content">
+                <div class="course-header">
+                    <span class="status-badge" [class.published]="course.status === CourseStatus.Published"
+                        [class.draft]="course.status === CourseStatus.Draft">
+                        {{ course.status === CourseStatus.Published ? 'Publicado' : 'Borrador' }}
+                    </span>
+                    <span class="date-badge">
+                        <i class='bx bx-calendar'></i> {{ course.createdAt | date:'dd MMM' }}
+                    </span>
+                </div>
+
+                <h3 class="course-title">{{ course.title }}</h3>
+                <p class="course-description">{{ course.description || 'Sin descripción' }}</p>
+
+                <div class="course-footer">
+                    <a [routerLink]="['/courses', course.id]" class="btn-icon" title="Ver Detalle">
+                        <i class='bx bx-show'></i>
+                    </a>
+
+                    <div class="actions-group" *ngIf="authService.isAdmin()">
+                        <a [routerLink]="['/courses', course.id, 'edit']" class="btn-icon secondary" title="Editar">
+                            <i class='bx bx-edit'></i>
+                        </a>
+
+                        <button *ngIf="course.status === CourseStatus.Draft" (click)="publishCourse(course.id)"
+                            class="btn-icon success" title="Publicar">
+                            <i class='bx bx-upload'></i>
+                        </button>
+
+                        <button *ngIf="course.status === CourseStatus.Published" (click)="unpublishCourse(course.id)"
+                            class="btn-icon warning" title="Despublicar">
+                            <i class='bx bx-hide'></i>
+                        </button>
+
+                        <button (click)="deleteCourse(course.id)" class="btn-icon danger" title="Eliminar">
+                            <i class='bx bx-trash'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-results-state" *ngIf="!loading && courses.length === 0">
+        <i class='bx bx-folder-open'></i>
+        <h3>No se encontraron cursos</h3>
+        <p>Intenta ajustar tus filtros de búsqueda</p>
+    </div>
+
+    <div class="pagination-container" *ngIf="totalPages > 1">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-secondary">
+            <i class='bx bx-chevron-left'></i> Anterior
+        </button>
+        <span class="page-info">Página <b>{{ currentPage }}</b> de <b>{{ totalPages }}</b></span>
+        <button (click)="nextPage()" [disabled]="currentPage >= totalPages" class="btn-secondary">
+            Siguiente <i class='bx bx-chevron-right'></i>
+        </button>
+    </div>
+</div>

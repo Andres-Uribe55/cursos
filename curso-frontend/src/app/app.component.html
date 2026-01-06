@@ -1,0 +1,36 @@
+<div class="app-container">
+  <nav class="navbar navbar-glass" *ngIf="authService.isAuthenticated()">
+    <div class="nav-content">
+      <a routerLink="/courses" class="nav-brand">
+        <i class='bx bxs-graduation'></i>
+        <span>{{ title }}</span>
+      </a>
+
+      <div class="nav-links">
+        <a routerLink="/courses" routerLinkActive="active" class="nav-item">
+          <i class='bx bx-book-open'></i>
+          <span>Cursos</span>
+        </a>
+        <a *ngIf="authService.isAdmin()" routerLink="/students" routerLinkActive="active" class="nav-item">
+          <i class='bx bx-user'></i>
+          <span>Estudiantes</span>
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <a routerLink="/profile" class="nav-item">
+          <i class='bx bx-user-circle'></i>
+          <span>Perfil</span>
+        </a>
+        <button (click)="logout()" class="btn-logout-icon">
+          <i class='bx bx-log-out'></i>
+          <span>Salir</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content fade-in">
+    <router-outlet></router-outlet>
+  </main>
+</div>
